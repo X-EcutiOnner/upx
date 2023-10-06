@@ -44,6 +44,7 @@ section LZMA_ELF00
 //      pushq ldst
 //      pushq dst
 //      addq src,lsrc; push lsrc  // &input_eof
+//      subq src,lsrc //restore the value of lsrc
 
 #define M_LZMA          14
 #ifndef NO_METHOD_CHECK
@@ -58,6 +59,7 @@ section LZMA_ELF00
 //)
         movl (ldst),%arg6l  // &outSize  XXX: 4GB
         movq dst,%arg5  // outp
+        subq src,lsrc  // LzmaDecode wants the size, not the EOF from ELFMAINX
         movq lsrc,%arg3  // inSize
         leaq 2(src),%arg2; pushq %arg2  // in; save @-8(%rbp) for size calc at eof
 
